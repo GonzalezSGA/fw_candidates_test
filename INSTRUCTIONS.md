@@ -61,7 +61,12 @@ As a support to validate the test, a CMake project is provided that includes a d
 6.	Unit Testing (Bonus): Providing unit tests for your solution will significantly improve your rating. Document unit tests that simulate various scenarios (e.g., a different number of connected Terminals, communication timeouts, collisions). You can use the provided test infrastructure based on Ceedling.
 
 ## Submission:
-- Submit your solution in a `.zip` file containing:
-    - C source code.
-    - Documentation.
-    - (Optional) Unit tests.
+- Submit your solution:
+    - As a repository branch (prefered):
+        - Include your source code
+        - Documentation
+        - (Optional) unit tests that will be executed on every push.
+    - In a `.zip` file containing:
+        - C source code.
+        - Documentation.
+        - (Optional) Unit tests.
