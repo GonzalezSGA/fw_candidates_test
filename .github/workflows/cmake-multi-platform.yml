@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Configure and Build Project
+    runs-on: ubuntu-latest
+    container:
+      image: rikorose/gcc-cmake:gcc-9
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Restore CMake cache
+        uses: actions/cache@v4
+        with:
+          path: /root/.cache/cmake
+          key: cmake-${{ runner.os }}-${{ hashFiles('**/CMakeLists.txt') }}
+          restore-keys: |
+            cmake-${{ runner.os }}-
+
+      - name: Configure project
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+      - name: Build project
+        run: |
+          cd build
+          make
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    container:
+      image: throwtheswitch/madsciencelab:1.0.1b
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Ceedling tests
+        run: ceedling test:all
+
+      - name: Collect test results
+        run: |
+          mkdir -p test-results
+          mv build/test/artifacts/test/junit_tests_report.xml ./test-results/test_report.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-tests-report
+          path: test-results/test_report.xml
